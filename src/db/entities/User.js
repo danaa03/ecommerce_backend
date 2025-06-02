@@ -1,6 +1,6 @@
-const {EntitySchema} = require("typeorm");
+import {EntitySchema} from "typeorm";
 
-module.exports = new EntitySchema({
+const user = new EntitySchema({
     name: "User",
     tableName: "users",
     columns: {
@@ -24,6 +24,7 @@ module.exports = new EntitySchema({
         },
         profilePicture : {
             type: "varchar",
+            nullable: true,
         },
         status : {
             type: "enum",
@@ -60,3 +61,5 @@ module.exports = new EntitySchema({
         },
     },
 })
+
+export default user;

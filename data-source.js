@@ -1,6 +1,6 @@
-const { DataSource } = require("typeorm");
+import  { DataSource } from "typeorm";
 
-const AppDataSource = new DataSource({
+const  AppDataSource = new DataSource({
   type: "postgres",
   host: "localhost",
   port: 5432,
@@ -9,9 +9,9 @@ const AppDataSource = new DataSource({
   database: "EMarketplace",
   synchronize: false, // For migrations
   logging: false,
-  entities: ["src/entities/*.js"],
-  migrations: ["src/migrations/*.js"],
+  entities: ["src/db/entities/*.js"],
+  migrations: ["src/db/migrations/*.js"],
   subscribers: [],
 });
 
-module.exports = AppDataSource;
+export default AppDataSource;

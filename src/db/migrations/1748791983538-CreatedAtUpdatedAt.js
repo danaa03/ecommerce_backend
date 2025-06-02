@@ -6,7 +6,7 @@
  * @class
  * @implements {MigrationInterface}
  */
-module.exports = class CreatedAtUpdatedAt1748791983538 {
+export default class CreatedAtUpdatedAt1748791983538 {
     name = 'CreatedAtUpdatedAt1748791983538'
 
     async up(queryRunner) {

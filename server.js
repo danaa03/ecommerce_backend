@@ -1,5 +1,5 @@
-const app = require('./app');
-const AppDataSource = require("./data-source");
+import app from './app.js';
+import AppDataSource from "./data-source.js";
 const PORT = 3000;
 
 AppDataSource.initialize()

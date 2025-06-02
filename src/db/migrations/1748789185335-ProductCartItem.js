@@ -6,7 +6,7 @@
  * @class
  * @implements {MigrationInterface}
  */
-module.exports = class ProductCartItem1748789185335 {
+export default class ProductCartItem1748789185335 {
     name = 'ProductCartItem1748789185335'
 
     async up(queryRunner) {

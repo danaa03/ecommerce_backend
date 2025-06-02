@@ -6,7 +6,7 @@
  * @class
  * @implements {MigrationInterface}
  */
-module.exports = class InitSchema1748787673063 {
+export default class InitSchema1748787673063 {
     name = 'InitSchema1748787673063'
 
     async up(queryRunner) {

@@ -6,7 +6,7 @@
  * @class
  * @implements {MigrationInterface}
  */
-module.exports = class Namefix1748791684172 {
+export default class Namefix1748791684172 {
     name = 'Namefix1748791684172'
 
     async up(queryRunner) {

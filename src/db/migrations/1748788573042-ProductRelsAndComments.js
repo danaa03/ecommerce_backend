@@ -6,7 +6,7 @@
  * @class
  * @implements {MigrationInterface}
  */
-module.exports = class ProductRelsAndComments1748788573042 {
+export default class ProductRelsAndComments1748788573042 {
     name = 'ProductRelsAndComments1748788573042'
 
     async up(queryRunner) {

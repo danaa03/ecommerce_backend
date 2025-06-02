@@ -1,18 +1,21 @@
-const {EntitySchema} = require("typeorm");
+import {EntitySchema} from "typeorm";
 
-module.exports = new EntitySchema({
-    name: "CartItem",
-    tableName: "cart_items",
+const comment = new EntitySchema({
+    name: "Comment",
+    tableName: "comments",
     columns: {
         id : {
             primary: true,
             type: "int",
             generated: true,
         },
-        image_path: {
+        content : {
             type: "varchar",
         },
-        created_at: {
+        pictures : {
+            type: "varchar",
+        },
+                created_at: {
             type: "timestamp",
             createDate: true, 
         },
@@ -26,12 +29,9 @@ module.exports = new EntitySchema({
         product : {
             type: "many-to-one",
             target: "Product",
-            inverseSide: "cartItems",
-        },
-        cart : {
-            type: "many-to-one",
-            target: "Cart",
-            inverseSide: "cartItems",
+            inverseSide: "comments",
         },
     },
 })
+
+export default comment;

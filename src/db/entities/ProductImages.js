@@ -1,13 +1,16 @@
-const {EntitySchema} = require("typeorm");
+import {EntitySchema} from "typeorm";
 
-module.exports = new EntitySchema({
-    name: "OrderedItem",
-    tableName: "ordered_items",
+const productImages =  new EntitySchema({
+    name: "ProductImage",
+    tableName: "product_images",
     columns: {
         id : {
             primary: true,
             type: "int",
             generated: true,
+        },
+        image_path: {
+            type: "varchar",
         },
         created_at: {
             type: "timestamp",
@@ -20,15 +23,12 @@ module.exports = new EntitySchema({
     },
 
     relations : {
-        order : {
-            type: "many-to-one",
-            target: "Order",
-            inverseSide: "orderedItems",
-        },
         product : {
             type: "many-to-one",
             target: "Product",
-            inverseSide: "orderedItems"
-        }
+            inverseSide: "product_images",
+        },
     },
 })
+
+export default productImages;
