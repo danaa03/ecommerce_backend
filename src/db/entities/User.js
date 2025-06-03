@@ -23,7 +23,7 @@ const user = new EntitySchema({
             type: "varchar",
         },
         profilePicture : {
-            type: "varchar",
+            type: "text",
             nullable: true,
         },
         status : {
@@ -35,6 +35,23 @@ const user = new EntitySchema({
             type: "enum",
             enum: ["shopkeeper", "customer"], 
             default: "customer", 
+        },
+        refreshToken: {
+            type: "text",
+            nullable: true,
+        },
+        verificationStatus: {
+            type: "enum",
+            enum: ["pending", "verified"],
+            default: "pending",
+        },
+        verificationToken: {
+            type: "text",
+            nullable: true,
+        },
+        verificationTokenExpires: {
+            type: "timestamp",
+            nullable: true,
         },
         created_at: {
             type: "timestamp",

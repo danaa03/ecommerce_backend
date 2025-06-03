@@ -6,7 +6,7 @@
  * @class
  * @implements {MigrationInterface}
  */
-module.exports = class ProfilePictureNullableFix1748876814345 {
+export default class ProfilePictureNullableFix1748876814345 {
     name = 'ProfilePictureNullableFix1748876814345'
 
     async up(queryRunner) {

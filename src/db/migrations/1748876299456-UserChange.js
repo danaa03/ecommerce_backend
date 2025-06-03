@@ -6,7 +6,7 @@
  * @class
  * @implements {MigrationInterface}
  */
-module.exports = class UserChange1748876299456 {
+export class UserChange1748876299456 {
     name = 'UserChange1748876299456'
 
     async up(queryRunner) {
