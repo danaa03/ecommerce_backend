@@ -26,7 +26,7 @@ const productImages =  new EntitySchema({
         product : {
             type: "many-to-one",
             target: "Product",
-            inverseSide: "product_images",
+            inverseSide: "productImages",
         },
     },
 })

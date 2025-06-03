@@ -31,14 +31,12 @@ const cart = new EntitySchema({
             type: "one-to-many",
             target: "CartItem",
             inverseSide: "cart",
-            joinColumn: true,
             eager: true,
         },
         orders: {
             type: "one-to-many",
             target: "OrderedItem",
             inverseSide: "cart",
-            joinColumn: true,
             eager: true,
         }
     },

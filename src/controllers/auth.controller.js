@@ -6,7 +6,6 @@ import { sendVerificationMail } from "../services/email.services.js";
 
 export const login = async(req,res) => {
     try {
-        console.log("login called");
         const {email, password} = req.body;
         const user = await existingUser(email);
         if(!user)
@@ -19,7 +18,7 @@ export const login = async(req,res) => {
             return res.status(401).json({ error: 'Authentication failed' });
         }
         
-        if (user.status !== "active") {
+        if (user.verificationStatus !== "verified") {
             return res.status(403).json({ error: 'Please verify your email before logging in.' });
         }
 

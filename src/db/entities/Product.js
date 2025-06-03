@@ -9,6 +9,12 @@ const product = new EntitySchema({
             type: "int",
             generated: true,
         },
+        name : {
+            type: "varchar",
+        },
+        price : {
+            type : "numeric",
+        },
         serialNumber : {
             type: "varchar",
         },
@@ -31,33 +37,30 @@ const product = new EntitySchema({
             target: "User",
             inverseSide: "products",
             eager: true,
+            joinColumn: true,
         },
         productImages : {
             type: "one-to-many",
             target: "ProductImage",
             inverseSide: "products",
-            eager: true,
-            joinColumn: true,
+            eager: true
         },
         comments : {
             type: "one-to-many",
             target: "Comment",
             inverseSide: "product",
-            eager: true,
-            joinColumn: true,
+            eager: true
         },
         cartItems: {
             type: "one-to-many",
             target: "CartItem",
             inverseSide: "product",
-            eager: true,
-            joinColumn: true,
+            eager: true
         },
         orderedItems: {
             type: "one-to-many",
             target: "OrderedItem",
-            inverseSide: "order",
-            joinColumn: true,
+            inverseSide: "orderedItems",
             eager: true,
         }
     },

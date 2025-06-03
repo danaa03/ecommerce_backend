@@ -1,4 +1,4 @@
-import {EntitySchema} from "typeorm";
+import {EntitySchema, JoinColumn} from "typeorm";
 
 const user = new EntitySchema({
     name: "User",

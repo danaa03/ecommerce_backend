@@ -1,4 +1,4 @@
-import {EntitySchema} from "typeorm";
+import {EntitySchema, JoinColumn} from "typeorm";
 
 const cartItem = new EntitySchema({
     name: "CartItem",
@@ -27,11 +27,13 @@ const cartItem = new EntitySchema({
             type: "many-to-one",
             target: "Product",
             inverseSide: "cartItems",
+            JoinColumn: true,
         },
         cart : {
             type: "many-to-one",
             target: "Cart",
             inverseSide: "cartItems",
+            JoinColumn: true,
         },
     },
 })
