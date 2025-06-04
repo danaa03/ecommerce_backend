@@ -28,6 +28,7 @@ const cartItem = new EntitySchema({
             target: "Product",
             inverseSide: "cartItems",
             joinColumn: true,
+            eager: true,
         },
         cart : {
             type: "many-to-one",

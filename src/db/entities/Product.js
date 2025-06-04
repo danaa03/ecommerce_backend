@@ -43,25 +43,21 @@ const product = new EntitySchema({
             type: "one-to-many",
             target: "ProductImage",
             inverseSide: "product",
-            eager: true,
         },
         comments : {
             type: "one-to-many",
             target: "Comment",
             inverseSide: "product",
-            eager: true,
         },
         cartItems: {
             type: "one-to-many",
             target: "CartItem",
             inverseSide: "product",
-            eager: true,
         },
         orderedItems: {
             type: "one-to-many",
             target: "OrderedItem",
             inverseSide: "product",
-            eager: true,
         }
     },
 })

@@ -24,13 +24,13 @@ const order = new EntitySchema({
             type: "many-to-one",
             target: "User",
             inverseSide: "orders",
+            eager: true,
             joinColumn: true,
         },
         orderedItems: {
             type: "one-to-many",
             target: "OrderedItem",
             inverseSide: "order",
-            eager: true,
         }
     },
 })

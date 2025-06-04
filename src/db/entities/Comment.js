@@ -12,10 +12,7 @@ const comment = new EntitySchema({
         content : {
             type: "varchar",
         },
-        pictures : {
-            type: "varchar",
-        },
-                created_at: {
+        created_at: {
             type: "timestamp",
             createDate: true, 
         },
@@ -37,6 +34,7 @@ const comment = new EntitySchema({
             target: "User",
             inverseSide: "comments",
             joinColumns: true,
+            eager: true,
         },
     },
 })

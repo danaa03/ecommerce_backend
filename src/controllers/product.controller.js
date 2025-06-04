@@ -34,14 +34,20 @@ export const getProducts = async (req, res) => {
   }
 };
 
+//displays product and commments
 export const getProductById = async (req, res) => {
   try {
     const productRepo = AppDataSource.getRepository(Product);
-    const product = await productRepo.findOne({ where: { id: parseInt(req.params.id) } });
+
+    const product = await productRepo.findOne({
+      where: { id: parseInt(req.params.id) },
+      relations: ["comments", "comments.user", "user"], 
+    });
 
     if (!product) {
       return res.status(404).json({ msg: "Product not found" });
     }
+
     res.status(200).json(product);
   } catch (err) {
     console.error(err);

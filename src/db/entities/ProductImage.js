@@ -28,6 +28,7 @@ const productImages =  new EntitySchema({
             target: "Product",
             inverseSide: "productImages",
             joinColumn: true,
+            eager: true,
         },
     },
 })

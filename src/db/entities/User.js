@@ -81,13 +81,11 @@ const user = new EntitySchema({
             type: "one-to-many",
             target: "Order",
             inverseSide: "user",
-            eager: true,
         },
         comments: {
             type: "one-to-many",
             target: "Order",
             inverseSide: "user",
-            eager: true,
         }
     },
 })
