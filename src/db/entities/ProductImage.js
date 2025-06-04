@@ -27,6 +27,7 @@ const productImages =  new EntitySchema({
             type: "many-to-one",
             target: "Product",
             inverseSide: "productImages",
+            joinColumn: true,
         },
     },
 })

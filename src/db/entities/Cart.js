@@ -24,7 +24,6 @@ const cart = new EntitySchema({
             type: "one-to-one",
             target: "User", //FK for user
             inverseSide: "cart",
-            joinColumn: true, //auto-creates foreign key userId in the carts table
             eager: true, //when we fetch a cart this will automatically fetch the associated user too
         },
         cartItems : {
@@ -33,12 +32,12 @@ const cart = new EntitySchema({
             inverseSide: "cart",
             eager: true,
         },
-        orders: {
-            type: "one-to-many",
-            target: "OrderedItem",
-            inverseSide: "cart",
-            eager: true,
-        }
+        // orders: {
+        //     type: "one-to-many",
+        //     target: "OrderedItem",
+        //     inverseSide: "cart",
+        //     eager: true,
+        // }
     },
 })
 

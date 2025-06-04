@@ -24,11 +24,13 @@ const orderedItem = new EntitySchema({
             type: "many-to-one",
             target: "Order",
             inverseSide: "orderedItems",
+            joinColumn: true,
         },
         product : {
             type: "many-to-one",
             target: "Product",
-            inverseSide: "orderedItems"
+            inverseSide: "orderedItems",
+            joinColumn: true,
         }
     },
 })

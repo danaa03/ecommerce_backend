@@ -67,6 +67,7 @@ const user = new EntitySchema({
         cart : {
             type: "one-to-one",
             target: "Cart",
+            joinColumn: true, //auto-creates foreign key cartId in the users table
             inverseSide: "user",
             cascade: true,
         },
@@ -76,6 +77,12 @@ const user = new EntitySchema({
             inverseSide: "user",
             cascade: true,
         },
+        orders: {
+            type: "one-to-many",
+            target: "Order",
+            inverseSide: "user",
+            eager: true,
+        }
     },
 })
 

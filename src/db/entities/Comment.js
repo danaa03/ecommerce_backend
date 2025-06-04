@@ -30,6 +30,7 @@ const comment = new EntitySchema({
             type: "many-to-one",
             target: "Product",
             inverseSide: "comments",
+            joinColumns: true,
         },
     },
 })

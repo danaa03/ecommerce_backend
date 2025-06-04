@@ -27,13 +27,13 @@ const cartItem = new EntitySchema({
             type: "many-to-one",
             target: "Product",
             inverseSide: "cartItems",
-            JoinColumn: true,
+            joinColumn: true,
         },
         cart : {
             type: "many-to-one",
             target: "Cart",
             inverseSide: "cartItems",
-            JoinColumn: true,
+            joinColumn: true,
         },
     },
 })

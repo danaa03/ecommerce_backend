@@ -32,7 +32,7 @@ const product = new EntitySchema({
     },
 
     relations : {
-        user : {
+        user : { //shopkeeper scenario
             type: "many-to-one",
             target: "User",
             inverseSide: "products",
@@ -42,25 +42,25 @@ const product = new EntitySchema({
         productImages : {
             type: "one-to-many",
             target: "ProductImage",
-            inverseSide: "products",
-            eager: true
+            inverseSide: "product",
+            eager: true,
         },
         comments : {
             type: "one-to-many",
             target: "Comment",
             inverseSide: "product",
-            eager: true
+            eager: true,
         },
         cartItems: {
             type: "one-to-many",
             target: "CartItem",
             inverseSide: "product",
-            eager: true
+            eager: true,
         },
         orderedItems: {
             type: "one-to-many",
             target: "OrderedItem",
-            inverseSide: "orderedItems",
+            inverseSide: "product",
             eager: true,
         }
     },

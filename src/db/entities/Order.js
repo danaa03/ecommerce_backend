@@ -20,16 +20,16 @@ const order = new EntitySchema({
     },
 
     relations : {
-        cart : {
+        user : {
             type: "many-to-one",
-            target: "Cart",
+            target: "User",
             inverseSide: "orders",
+            joinColumn: true,
         },
         orderedItems: {
             type: "one-to-many",
             target: "OrderedItem",
             inverseSide: "order",
-            joinColumn: true,
             eager: true,
         }
     },
