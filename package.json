@@ -1,26 +1,21 @@
 {
-  "name": "test-project-backend",
-  "version": "1.0.0",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/danaa03/ecommerce_backend.git"
-  },
-  "keywords": [
-    "ecommerce"
-  ],
-  "author": "Danaa",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/danaa03/ecommerce_backend/issues"
-  },
-  "homepage": "https://github.com/danaa03/ecommerce_backend#readme",
-  "description": "",
-  "dependencies": {
-    "express": "^5.1.0"
-  }
+   "name": "typeorm-sample",
+   "version": "0.0.1",
+   "description": "Ecommerce site developed with TypeORM.",
+   "type": "module",
+   "dependencies": {
+      "bcrypt": "^6.0.0",
+      "dotenv": "^16.5.0",
+      "express": "^5.1.0",
+      "jsonwebtoken": "^9.0.2",
+      "nodemailer": "^7.0.3",
+      "nodemon": "^3.1.10",
+      "pg": "^8.16.0",
+      "reflect-metadata": "^0.2.2",
+      "typeorm": "^0.3.24"
+   },
+   "scripts": {
+      "start": "nodemon server.js",
+      "typeorm": "typeorm"
+   }
 }
