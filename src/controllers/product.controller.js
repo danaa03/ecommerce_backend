@@ -1,13 +1,11 @@
-import AppDataSource from "../db/data-source.js";
-import Product from "../db/entities/Product.js";
+import { getProductRepo } from '../db/repo.js';
 import crypto from 'crypto';
 
 export const addProduct = async(req,res) => {
     try {
         const {name, description, price} = req.body;
         const userId = req.userId;
-        const productRepo = AppDataSource.getRepository(Product);
-
+        const productRepo = getProductRepo();
         const timestamp = Date.now();
         const randomHex = crypto.randomBytes(4).toString('hex');
         const serialNumber = `PROD-${timestamp}-${randomHex}`;
@@ -25,7 +23,7 @@ export const addProduct = async(req,res) => {
 
 export const getProducts = async (req, res) => {
   try {
-    const productRepo = AppDataSource.getRepository(Product);
+    const productRepo = getProductRepo();
     const products = await productRepo.find();
     res.status(200).json(products);
   } catch (err) {
@@ -34,10 +32,10 @@ export const getProducts = async (req, res) => {
   }
 };
 
-//displays product and commments
+//display product and commments
 export const getProductById = async (req, res) => {
   try {
-    const productRepo = AppDataSource.getRepository(Product);
+    const productRepo = getProductRepo();
 
     const product = await productRepo.findOne({
       where: { id: parseInt(req.params.id) },
@@ -58,16 +56,19 @@ export const getProductById = async (req, res) => {
 export const updateProduct = async (req, res) => {
   try {
     const { name, description, price } = req.body;
-    const productRepo = AppDataSource.getRepository(Product);
+    const productRepo = getProductRepo();
 
     const product = await productRepo.findOne({ where: { id: parseInt(req.params.id) } });
     if (!product) {
       return res.status(404).json({ msg: "Product not found" });
     }
 
-    if (name !== undefined) product.name = name;
-    if (description !== undefined) product.description = description;
-    if (price !== undefined) product.price = price;
+    if (name !== undefined) 
+      product.name = name;
+    if (description !== undefined) 
+      product.description = description;
+    if (price !== undefined) 
+      product.price = price;
 
     await productRepo.save(product);
     res.status(200).json({ msg: "Product updated successfully", product });
@@ -79,7 +80,7 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    const productRepo = AppDataSource.getRepository(Product);
+    const productRepo = getProductRepo();
 
     const product = await productRepo.findOne({ where: { id: parseInt(req.params.id) } });
     if (!product) {

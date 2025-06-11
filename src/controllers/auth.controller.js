@@ -1,12 +1,12 @@
-import AppDataSource from "../db/data-source.js";
-import User from "../db/entities/User.js";
 import bcrypt from "bcrypt";
 import { generateAccessToken, generateRefreshToken, generateEmailVerificationToken, existingUser } from "../services/jwt.services.js"
 import { sendVerificationMail } from "../services/email.services.js";
+import { getUserRepo, getCartRepo } from "../db/repo.js";
 
 export const login = async(req,res) => {
     try {
         const {email, password} = req.body;
+        const userRepo = getUserRepo();
         const user = await existingUser(email);
         if(!user)
         {
@@ -24,12 +24,10 @@ export const login = async(req,res) => {
 
         const accessToken = generateAccessToken(user.id);
         const refreshToken = generateRefreshToken(user.id);
-
-        const userRepo = AppDataSource.getRepository(User);
         user.refreshToken = refreshToken;
 
-        await userRepo.save(user)
-
+        await userRepo.save(user);
+        
         res.status(200).json({ accessToken, refreshToken });
     }
     catch (err) {
@@ -55,13 +53,20 @@ export const signup = async(req,res) => {
         }
 
         const {verificationToken, verificationTokenExpires} = generateEmailVerificationToken();
-        const userRepo = AppDataSource.getRepository(User);
+        const userRepo = getUserRepo();
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = userRepo.create({ email, name, password:hashedPassword, phone, profilePicture: profilePicture || null, role, verificationToken, verificationTokenExpires});
         const verificationUrl = `${process.env.FRONTEND_URL}/auth/verify-email?token=${verificationToken}`;
 
         await sendVerificationMail(verificationUrl, email);
         await userRepo.save(newUser);
+
+        //create a cart and assign the cartId to the user
+        const cartRepo = getCartRepo();
+        const cart = {
+            user: {id:newUser.id}
+        };
+        await cartRepo.save(cart);
 
         res.status(201).json({ message: 'Email sent for verification.', user: newUser });
     } catch (error) {
@@ -78,7 +83,7 @@ export const verifyEmail = async (req, res) => {
     }
 
     try {
-        const userRepo = AppDataSource.getRepository(User);
+        const userRepo = getUserRepo();
         const user = await userRepo.findOne({
             where: { verificationToken: token }
         });
@@ -113,7 +118,7 @@ export const resendVerificationToken = async (req, res) => {
     }
 
     try {
-        const userRepo = AppDataSource.getRepository(User);
+        const userRepo = getUserRepo();
         const user = await userRepo.findOne({ where: { email } });
 
         if (!user) {

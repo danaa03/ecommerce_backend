@@ -9,8 +9,9 @@ const cartItem = new EntitySchema({
             type: "int",
             generated: true,
         },
-        image_path: {
-            type: "varchar",
+        quantity : {
+            type: "int",
+            default: 0,
         },
         created_at: {
             type: "timestamp",
@@ -35,7 +36,7 @@ const cartItem = new EntitySchema({
             target: "Cart",
             inverseSide: "cartItems",
             joinColumn: true,
-        },
+        }
     },
 })
 

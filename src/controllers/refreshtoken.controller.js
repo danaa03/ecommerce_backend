@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
-import AppDataSource from '../db/data-source';
-import User from '../db/entities/User';
-import {generateAccessToken} from '../services/jwt.services';
+import { getUserRepo } from '../db/repo.js';
+import {generateAccessToken} from '../services/jwt.services.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -13,7 +12,7 @@ export const refreshToken = async (req,res) => {
 
     try {
         const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-        const userRepo = AppDataSource.getRepository(User);
+        const userRepo = getUserRepo();
 
         const user = await userRepo.findOne({
             where: {id: payload.userId, refreshToken},
@@ -23,13 +22,12 @@ export const refreshToken = async (req,res) => {
             return res.status(403).json({error: "Invalid refresh token"});
         }
 
-        //generate new access token when the refresh token is confirmed to be in the user's entity
         const accessToken = generateAccessToken(user.id);
         
         //return new access token
         res.json({accessToken});
     } catch (err) {
-        const userRepo = AppDataSource.getRepository(User);
+        const userRepo = getUserRepo();
 
         if (err.name === "TokenExpiredError") { //thrown by the verify line
         //refresh token expired; remove it from the db
