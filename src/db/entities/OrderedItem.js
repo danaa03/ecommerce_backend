@@ -9,6 +9,12 @@ const orderedItem = new EntitySchema({
             type: "int",
             generated: true,
         },
+        price: {
+            type: "numeric",
+        },
+        quantity : {
+            type: "int",
+        },
         created_at: {
             type: "timestamp",
             createDate: true, 

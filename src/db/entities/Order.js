@@ -9,6 +9,11 @@ const order = new EntitySchema({
             type: "int",
             generated: true,
         },
+        total_amount : {
+            default: 0,
+            type: "numeric",
+            nullable: false,
+        },
         created_at: {
             type: "timestamp",
             createDate: true, 
@@ -16,6 +21,14 @@ const order = new EntitySchema({
         updated_at: {
             type: "timestamp",
             updateDate: true, 
+        },
+        address: {
+            type: "text",
+            nullable: "false",
+        },
+        phone: {
+            type: "varchar",
+            nullable: false,
         },
     },
 

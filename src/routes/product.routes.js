@@ -1,5 +1,5 @@
 import {addProduct, getProductById, getProducts, deleteProduct, updateProduct} from '../controllers/product.controller.js';
-import {verifyToken} from '../middlewares/auth.middleware.js';
+import verifyToken from '../middlewares/auth.middleware.js';
 import express from 'express';
 
 const router = express.Router();

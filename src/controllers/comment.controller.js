@@ -39,9 +39,8 @@ export const addComment = async(req,res) => {
 
 export const updateComment = async (req, res) => {
   try {
-    const commentId = parseInt(req.params.id);
     const userId = req.userId;
-    const { content } = req.body;
+    const { commentId, content } = req.body;
 
     if (!content) {
       return res.status(400).json({ msg: "Content is required" });

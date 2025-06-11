@@ -1,4 +1,4 @@
-import {EntitySchema, JoinColumn} from "typeorm";
+import {EntitySchema} from "typeorm";
 
 const user = new EntitySchema({
     name: "User",
@@ -15,9 +15,19 @@ const user = new EntitySchema({
         },
         name : {
             type: "varchar",
+            length: 30,
         },
         password : {
             type: "varchar",
+            length: 100,
+            comment: "CHECK (LENGTH(password) >= 6)",
+            transformer: {
+                to: (value) => {
+                if (value.length < 8) throw new Error("Password too short");
+                return value;
+                },
+                from: (value) => value,
+            },
         },
         phone : {
             type: "varchar",
@@ -25,11 +35,6 @@ const user = new EntitySchema({
         profilePicture : {
             type: "text",
             nullable: true,
-        },
-        status : {
-            type: "enum",
-            enum: ["pending", "active"], //checks if the user is logged in or not to determine what cart we need to show
-            default: "pending", //signed out by default
         },
         role : {
             type: "enum",
@@ -67,7 +72,6 @@ const user = new EntitySchema({
         cart : {
             type: "one-to-one",
             target: "Cart",
-            joinColumn: true, //auto-creates foreign key cartId in the users table
             inverseSide: "user",
             cascade: true,
         },
