@@ -25,10 +25,23 @@ export const login = async(req,res) => {
         const accessToken = generateAccessToken(user.id);
         const refreshToken = generateRefreshToken(user.id);
         user.refreshToken = refreshToken;
+        user.accessToken = accessToken;
 
         await userRepo.save(user);
-        
-        res.status(200).json({ accessToken, refreshToken });
+
+        const userResponse = {
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                address: user.address,
+            },
+            accessToken,
+            refreshToken,
+        }
+
+        res.status(200).json(userResponse);
     }
     catch (err) {
         console.error(err);
@@ -38,7 +51,7 @@ export const login = async(req,res) => {
 
 export const signup = async(req,res) => {
     try {
-        const { email, name, password, confirmPassword, role, phone, profilePicture } = req.body;
+        const { email, name, password, confirmPassword, role, phone, profilePicture, address } = req.body;
         //check if email already exists
 
         if (await existingUser(email)) 
@@ -55,7 +68,7 @@ export const signup = async(req,res) => {
         const {verificationToken, verificationTokenExpires} = generateEmailVerificationToken();
         const userRepo = getUserRepo();
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = userRepo.create({ email, name, password:hashedPassword, phone, profilePicture: profilePicture || null, role, verificationToken, verificationTokenExpires});
+        const newUser = userRepo.create({ email, name, password:hashedPassword, phone, profilePicture: profilePicture || null, verificationToken, verificationTokenExpires, address});
         const verificationUrl = `${process.env.FRONTEND_URL}/auth/verify-email?token=${verificationToken}`;
 
         await sendVerificationMail(verificationUrl, email);
@@ -136,7 +149,7 @@ export const resendVerificationToken = async (req, res) => {
 
         await userRepo.save(user);
 
-        const verificationUrl = `${process.env.FRONTEND_URL}/auth/verify-email?token=${verificationToken}`;
+        const verificationUrl = `http://localhost:5000/auth/verify-email?token=${verificationToken}`;
         await sendVerificationMail(verificationUrl, user.email);
 
         return res.status(200).json({ message: "Verification email resent successfully" });

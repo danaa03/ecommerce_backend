@@ -5,9 +5,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const refreshToken = async (req,res) => {
-    const {refreshToken} = req.body;
-    if(!refreshToken) {
-        return res.status(401).json({error: "Refresh Token not provided"});
+    const {refreshToken, accessToken} = req.body;
+    if(!refreshToken ||!accessToken) {
+        return res.status(401).json({error: "Refresh Token or Access Token not provided"});
     }
 
     try {
@@ -22,10 +22,17 @@ export const refreshToken = async (req,res) => {
             return res.status(403).json({error: "Invalid refresh token"});
         }
 
-        const accessToken = generateAccessToken(user.id);
+        if (user.accessToken && user.accessToken !== accessToken) {
+            return res.status(401).json({ error: "Access token mismatch. Possible session hijack." });
+        }
+
+        const newAccessToken = generateAccessToken(user.id);
+        //save in user repo
+        user.accessToken = newAccessToken;
+        const newUser = await userRepo.save(user);
         
         //return new access token
-        res.json({accessToken});
+        res.json({ newAccessToken });
     } catch (err) {
         const userRepo = getUserRepo();
 

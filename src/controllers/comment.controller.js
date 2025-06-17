@@ -40,7 +40,8 @@ export const addComment = async(req,res) => {
 export const updateComment = async (req, res) => {
   try {
     const userId = req.userId;
-    const { commentId, content } = req.body;
+    const commentId = parseInt(req.params.id);
+    const { content } = req.body;
 
     if (!content) {
       return res.status(400).json({ msg: "Content is required" });
@@ -72,8 +73,9 @@ export const updateComment = async (req, res) => {
 
 export const deleteComment = async (req, res) => {
   try {
-    const commentId = parseInt(req.params.id);
     const userId = req.userId;
+    console.log(userId);
+    const commentId = parseInt(req.params.id);
 
     const commentRepo = AppDataSource.getRepository(Comment);
 
@@ -84,6 +86,8 @@ export const deleteComment = async (req, res) => {
     if (!comment) {
       return res.status(404).json({ msg: "Comment not found" });
     }
+
+    console.log("comment.user.id: ", comment.user.id, " userid: ",userId )
 
     if (comment.user.id !== userId) {
       return res.status(403).json({ msg: "You are not authorized to delete this comment" });
@@ -97,3 +101,37 @@ export const deleteComment = async (req, res) => {
   }
 };
 
+export const getComments = async (req, res) => {
+  try {
+    const productId = parseInt(req.params.id);
+
+    if (!productId) {
+      return res.status(400).json({ msg: "Product ID is required" });
+    }
+
+    const commentRepo = AppDataSource.getRepository(Comment);
+
+    const comments = await commentRepo.find({
+      where: { product: { id: productId } },
+      order: { created_at: "DESC" }, 
+      relations: ["user"], 
+    });
+
+      let commentsResponse = comments.map(comment => ({
+          id: comment.id,
+          content: comment.content,
+          created_at: comment.created_at,
+          updated_at: comment.updated_at,
+          user: {
+            id: comment.user.id,
+            email: comment.user.email,
+            name: comment.user.name,
+          }
+      }));
+
+    res.status(200).json(commentsResponse);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Error fetching comments" });
+  }
+};
