@@ -37,6 +37,7 @@ const product = new EntitySchema({
             target: "User",
             inverseSide: "products",
             joinColumn: true,
+            eager: true,
         },
         productImages : {
             type: "one-to-many",

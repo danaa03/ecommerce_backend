@@ -24,8 +24,49 @@ export const addProduct = async(req,res) => {
 export const getProducts = async (req, res) => {
   try {
     const productRepo = getProductRepo();
-    const products = await productRepo.find();
+    let products = await productRepo.find();
+      products = products.map(product => ({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          serialNumber : product.serialNumber,
+          description : product.description,
+          user: {
+            id: product.user.id,
+            seller: product.user.name,
+            sellersContact: product.user.phone,
+          }
+      }));
     res.status(200).json(products);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Error fetching products" });
+  }
+};
+
+export const getMyProducts = async (req, res) => {
+  const userId = req.userId;
+  try {
+    const productRepo = getProductRepo();
+    let products = await productRepo.find({
+      where: {
+        user: {id: userId},
+      },
+    });
+      products = products.map(product => ({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          serialNumber : product.serialNumber,
+          user: {
+            id: product.user.id,
+            seller: product.user.name,
+            sellersContact: product.user.phone,
+          }
+      }));
+    res.status(200).json(products);
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "Error fetching products" });
@@ -37,7 +78,7 @@ export const getProductById = async (req, res) => {
   try {
     const productRepo = getProductRepo();
 
-    const product = await productRepo.findOne({
+    let product = await productRepo.findOne({
       where: { id: parseInt(req.params.id) },
       relations: ["comments", "comments.user", "user"], 
     });
@@ -46,7 +87,20 @@ export const getProductById = async (req, res) => {
       return res.status(404).json({ msg: "Product not found" });
     }
 
-    res.status(200).json(product);
+    const responseProduct = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        description: product.description,
+        serialNumber : product.serialNumber,
+        user: {
+          id: product.user.id,
+          seller: product.user.name,
+          sellersContact: product.user.phone,
+        }
+    }
+
+    res.status(200).json(responseProduct);
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "Error fetching product" });
@@ -81,7 +135,6 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   try {
     const productRepo = getProductRepo();
-
     const product = await productRepo.findOne({ where: { id: parseInt(req.params.id) } });
     if (!product) {
       return res.status(404).json({ msg: "Product not found" });

@@ -20,6 +20,8 @@ export const checkout = async (req, res) => {
         if (!cartItems.length) {
             return res.status(400).json({ msg: "Cart is empty" });
         }
+
+        console.log("aASJKAJSKA: ",cartItems)
         //total amount by reduction
         const totalAmount = cartItems.reduce((sum, item) => {
             const price = parseFloat(item.product.price); 
@@ -30,31 +32,49 @@ export const checkout = async (req, res) => {
             address,
             phone, 
             total_amount: totalAmount,
-            user: { id: userId }
+            user: { id: userId },
         });
+
         order = await orderRepo.save(order);
 
         const orderedItems = await Promise.all(
-            cartItems.map(async (cartItem) => {
+        cartItems.map(async (cartItem) => {
+            try {
                 const orderedItem = orderedItemRepo.create({
-                    price: cartItem.product.price,
-                    quantity: cartItem.quantity,
-                    order: { id: order.id },
-                    product: { id: cartItem.product.id },
-                    cartItem: { id: cartItem.id } 
-                });
+                price: cartItem.product.price,
+                quantity: cartItem.quantity,
+                order: { id: order.id },
+                product: { id: cartItem.product.id },
+                cartItem: { id: cartItem.id },
+            });
 
-                return await orderedItemRepo.save(orderedItem);
-            })
+            const saved = await orderedItemRepo.save(orderedItem);
+            saved.product.name = cartItem.product.name;
+            console.log(saved);
+            return saved;
+            } catch (err) {
+            console.error("Failed to save orderedItem for:", cartItem.product.name, err);
+            return null;
+            }
+        })
         );
+        
+        const successfulItems = orderedItems.filter((item) => item !== null);
+        console.log("SASASA:", successfulItems);
 
         const cartItemsToDelete = await cartItemRepo.find({
             where: { cart: { user: { id: userId } } },
             select: ['id']
         });
-        await cartItemRepo.delete(cartItemsToDelete.map(item => item.id));
+        if (!cartItemsToDelete.length) {
+            console.warn("No cart items found to delete for user:", userId);
+        } else {
+            const ids = cartItemsToDelete.map(item => item.id);
+            console.log("Deleting cart items with IDs:", ids);
+            await cartItemRepo.delete(ids);
+        }
 
-        res.status(201).json({ msg: "Order created successfully", order, orderedItems });
+        res.status(201).json({ msg: "Order created successfully", order, orderedItems:successfulItems });
 
     } catch (err) {
         console.error(err);

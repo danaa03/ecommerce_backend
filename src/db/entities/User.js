@@ -36,12 +36,15 @@ const user = new EntitySchema({
             type: "text",
             nullable: true,
         },
-        role : {
-            type: "enum",
-            enum: ["shopkeeper", "customer"], 
-            default: "customer", 
+        address : {
+            type: "text", 
+            nullable: true,
         },
         refreshToken: {
+            type: "text",
+            nullable: true,
+        },
+        accessToken: {
             type: "text",
             nullable: true,
         },

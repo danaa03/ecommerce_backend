@@ -1,6 +1,6 @@
 import app from './app.js';
 import AppDataSource from "./src/db/data-source.js";
-const PORT = 3000;
+const PORT = 5000;
 
 AppDataSource.initialize()
   .then(() => {
