@@ -59,6 +59,7 @@ export const getMyProducts = async (req, res) => {
           name: product.name,
           price: product.price,
           serialNumber : product.serialNumber,
+          description: product.description,
           user: {
             id: product.user.id,
             seller: product.user.name,
@@ -73,19 +74,24 @@ export const getMyProducts = async (req, res) => {
   }
 };
 
-//display product and commments
+export const findProductById = async (productId) => {
+  const productRepo = getProductRepo();
+
+  let product = await productRepo.findOne({
+    where: { id: productId },
+    relations: ["comments", "comments.user", "user"], 
+  });
+  return product;
+}
+
+//display product 
 export const getProductById = async (req, res) => {
   try {
-    const productRepo = getProductRepo();
+    const productId = parseInt(req.params.id)
+    const product = await findProductById(productId);
 
-    let product = await productRepo.findOne({
-      where: { id: parseInt(req.params.id) },
-      relations: ["comments", "comments.user", "user"], 
-    });
-
-    if (!product) {
-      return res.status(404).json({ msg: "Product not found" });
-    }
+    if(!product)
+      res.status(400).json({msg: "Product not found!"});
 
     const responseProduct = {
         id: product.id,
@@ -110,9 +116,16 @@ export const getProductById = async (req, res) => {
 export const updateProduct = async (req, res) => {
   try {
     const { name, description, price } = req.body;
+    const userId = req.userId;
     const productRepo = getProductRepo();
+    console.log("UPDATE product id param:", req.params.id);
 
-    const product = await productRepo.findOne({ where: { id: parseInt(req.params.id) } });
+    const product = await productRepo.findOne({ 
+      where: { 
+        id: parseInt(req.params.id),
+        user: {id: userId}, //check if the product is the logged in user's product
+      }, 
+    });
     if (!product) {
       return res.status(404).json({ msg: "Product not found" });
     }
@@ -132,6 +145,26 @@ export const updateProduct = async (req, res) => {
   }
 };
 
+export const checkProductOwner = async(productId, userId) => {
+  try {
+    const productRepo = getProductRepo();
+    //check if the product was posted by the user 
+    const product = await productRepo.findOne({
+      where: {
+        id: productId,
+        user: {id: userId},
+      },
+    })
+    if(product)
+      throw new Error("cannot add own product to cart");
+
+    return product;
+
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const deleteProduct = async (req, res) => {
   try {
     const productRepo = getProductRepo();
@@ -139,7 +172,6 @@ export const deleteProduct = async (req, res) => {
     if (!product) {
       return res.status(404).json({ msg: "Product not found" });
     }
-
     await productRepo.remove(product);
     res.status(200).json({ msg: "Product deleted successfully" });
   } catch (err) {

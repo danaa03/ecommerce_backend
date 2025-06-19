@@ -1,6 +1,5 @@
-import AppDataSource from "../db/data-source.js";
-import Comment from "../db/entities/Comment.js";
-import Product from "../db/entities/Product.js";
+import { getCommentRepo } from "../db/repo.js";
+import { findProductById } from "./product.controller.js";
 
 export const addComment = async(req,res) => {
     try {
@@ -10,12 +9,7 @@ export const addComment = async(req,res) => {
         }
         const userId = req.userId;
 
-        const productRepo = AppDataSource.getRepository(Product);
-        
-        //user should not be able to post a comment on their own product
-        const product = await productRepo.findOne({
-            where: { id: productId },
-        });
+        const product = await findProductById(productId);
 
         if (!product) {
         return res.status(404).json({ message: "Product not found." });
@@ -24,7 +18,7 @@ export const addComment = async(req,res) => {
         if (product.user.id === userId) {
         return res.status(403).json({ message: "You cannot comment on your own product." });
         }
-        const commentRepo = AppDataSource.getRepository(Comment);
+        const commentRepo = getCommentRepo();
 
         const newComment = commentRepo.create({ content, user: {id:userId}, product: {id: productId}});
         await commentRepo.save(newComment);
@@ -47,7 +41,7 @@ export const updateComment = async (req, res) => {
       return res.status(400).json({ msg: "Content is required" });
     }
 
-    const commentRepo = AppDataSource.getRepository(Comment);
+    const commentRepo = getCommentRepo();
 
     const comment = await commentRepo.findOne({
       where: { id: commentId },
@@ -77,7 +71,7 @@ export const deleteComment = async (req, res) => {
     console.log(userId);
     const commentId = parseInt(req.params.id);
 
-    const commentRepo = AppDataSource.getRepository(Comment);
+    const commentRepo = getCommentRepo();
 
     const comment = await commentRepo.findOne({
       where: { id: commentId }, //not specifying relations as eager was already set to true
@@ -109,7 +103,7 @@ export const getComments = async (req, res) => {
       return res.status(400).json({ msg: "Product ID is required" });
     }
 
-    const commentRepo = AppDataSource.getRepository(Comment);
+    const commentRepo = getCommentRepo();
 
     const comments = await commentRepo.find({
       where: { product: { id: productId } },
