@@ -5,7 +5,6 @@ import commentRoutes from './src/routes/comment.routes.js';
 import cartRoutes from './src/routes/cart.routes.js';
 import orderRoutes from './src/routes/order.routes.js';
 import refreshRoutes from './src/routes/refreshToken.routes.js';
-import searchRoutes from './src/routes/search.routes.js';
 import userRoutes from './src/routes/user.routes.js';
 import cartItemRoutes from './src/routes/cartItem.routes.js';
 
@@ -31,7 +30,6 @@ app.use('/cart', cartRoutes);
 app.use('/order', orderRoutes);
 app.use('/refresh', refreshRoutes);
 app.use('/user', userRoutes);
-app.use('/search', searchRoutes);
 app.use('/cartItem', cartItemRoutes);
 
 export default app;
