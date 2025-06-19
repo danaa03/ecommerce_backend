@@ -1,22 +1,14 @@
 import dotenv from 'dotenv';
-import AppDataSource from '../db/data-source.js';
-import User from '../db/entities/User.js';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 
 dotenv.config();
 
-export const existingUser = async(email) =>
-{
-    const userRepo = AppDataSource.getRepository(User);
-    return await userRepo.findOne({ where: { email } });
-};
-
 export const generateAccessToken = (userId) => {
     const accessToken = jwt.sign(
         { userId },
         process.env.JWT_SECRET,
-        { expiresIn: '30s' } 
+        { expiresIn: '15m' } 
     );
 
     return accessToken;

@@ -4,6 +4,7 @@
    "description": "Ecommerce site developed with TypeORM.",
    "type": "module",
    "dependencies": {
+      "aws-sdk": "^2.1692.0",
       "bcrypt": "^6.0.0",
       "cors": "^2.8.5",
       "dotenv": "^16.5.0",

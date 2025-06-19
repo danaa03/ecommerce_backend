@@ -15,7 +15,7 @@ const user = new EntitySchema({
         },
         name : {
             type: "varchar",
-            length: 30,
+            length: 100,
         },
         password : {
             type: "varchar",

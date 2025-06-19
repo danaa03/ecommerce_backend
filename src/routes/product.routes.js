@@ -8,7 +8,7 @@ router.post("/add-product", verifyToken, addProduct);
 router.get("/my-products", verifyToken, getMyProducts);
 router.get("/", getProducts);
 router.get('/:id', getProductById);
-router.put('/:id', verifyToken, updateProduct);
+router.patch('/:id', verifyToken, updateProduct);
 router.delete('/:id', verifyToken, deleteProduct);
 
 export default router;
