@@ -33,12 +33,6 @@ const cart = new EntitySchema({
             inverseSide: "cart",
             eager: true,
         },
-        // orders: {
-        //     type: "one-to-many",
-        //     target: "OrderedItem",
-        //     inverseSide: "cart",
-        //     eager: true,
-        // }
     },
 })
 
